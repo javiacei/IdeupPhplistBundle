@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+  <parameters>
+      <parameter key="ideup_phplist_manager.class">Ideup\PhplistBundle\Model\PhplistManager</parameter>
+  </parameters>
+
+  <services>
+      <service id="ideup.phplist_manager" class="%ideup_phplist_manager.class%">
+        <argument type="service" id="doctrine.orm.phplist_entity_manager"></argument>
+        
+        <call method="setPhplistPath"><argument>%ideup_phplist.path%</argument></call>
+        <call method="setServerFrom"><argument>%ideup_phplist.server_from%</argument></call>
+      </service>
+  </services>
+
+</container>
