@@ -138,7 +138,10 @@ class PhplistUserUser
      */
     public function doPrePersist()
     {
-        $this->modified = new DateTime();
+        $this->modified = new \DateTime();
+        $this->entered = new \DateTime();
+        $this->uniqid = uniqid();
+        $this->passwordchanged = new \DateTime();
     }
 
 

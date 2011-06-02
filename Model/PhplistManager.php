@@ -72,7 +72,13 @@ class PhplistManager
 
     protected function getUserExtraData()
     {
-        return array('confirmed' => true, 'htmlemail' => true, 'disabled' => false);
+        return array(
+            'confirmed'     => true,
+            'htmlemail'     => true,
+            'disabled'      => false,
+            'blacklisted'   => false,
+            'bouncecount'   => 0,            
+        );
     }
 
     public function createPhplistUser($userData, PhplistList $list)
@@ -158,7 +164,16 @@ class PhplistManager
         fclose($handle);
 
         $output = null;
-        $resultExec = exec("php {$this->getPhplistPath()} -psend -s $subject -l $list -f {$this->getServerFrom()} < $filename", &$output);
+        echo "php {$this->getPhplistPath()} -psend -s $subject -l {$list->getName()} -f {$this->getServerFrom()} < $filename" . "\n";
+        $resultExec = exec("php {$this->getPhplistPath()} -psend -s $subject -l {$list->getName()} -f {$this->getServerFrom()} < $filename", &$output);
+        return $output;
+    }
+
+    public function processQueue()
+    {
+        $output = null;
+        $resultExec = exec("php {$this->getPhplistPath()} -pprocessqueue", &$output);
+
         return $output;
     }
 }
