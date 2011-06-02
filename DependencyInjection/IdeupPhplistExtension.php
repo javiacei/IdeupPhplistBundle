@@ -32,6 +32,7 @@ class IdeupPhplistExtension extends Extension
         // Parameters
         $container->setParameter('ideup_phplist.path', $config['admin_index_path']);
         $container->setParameter('ideup_phplist.server_from', $config['server_from']);
+        $container->setParameter('ideup_phplist.tmp_directory', $config['tmp_directory']);
         
     }
     

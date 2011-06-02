@@ -34,6 +34,9 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('server_from')
                     ->defaultValue('me@server.com')
                 ->end()
+                ->scalarNode('tmp_directory')
+                    ->defaultValue('/tmp')
+                ->end()
             ->end()
         ;
 

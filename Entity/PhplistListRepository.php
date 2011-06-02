@@ -5,9 +5,9 @@ namespace Ideup\PhpListBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 
 class PhplistListRepository extends EntityRepository
-{
-    public function getListsByName($name)
+{    
+    public function findOneByName($name)
     {
-        return $this->findBy(array('name' => $name));
+        return $this->findOneBy(array('name' => $name));
     }
 }

@@ -13,9 +13,21 @@ class PhplistManager
 
     protected $em;
 
+    protected $tmp;
+
     public function  __construct(\Doctrine\ORM\EntityManager $em)
     {
         $this->setEntityManager($em);
+    }
+
+    public function setTmp($tmp)
+    {
+        $this->tmp = $tmp;
+    }
+
+    public function getTmp()
+    {
+        return $this->tmp;
     }
 
     public function setPhplistPath($pp)
@@ -76,7 +88,6 @@ class PhplistManager
         $phplistUser = new PhplistUserUser();
 
         // Extra data.
-        // If parameter has this 'param', from $userData
         $extraData = $this->getUserExtraData();
         $intersects = array_intersect_key($userData, $extraData);
         foreach ($intersects as $paramName => $paramValue){
@@ -94,6 +105,16 @@ class PhplistManager
         return $phplistUser;
     }
 
+    public function getOnePhplistUserById($id)
+    {
+        return $this->getUserRepository()->findOneBy(array('id' => $id));
+    }
+
+    public function getOnePhplistUserByEmail($email)
+    {
+        return $this->getUserRepository()->findOneByEmail($email);
+    }
+
     public function createPhplistList($listData)
     {
         if (!is_array($listData)){
@@ -104,7 +125,7 @@ class PhplistManager
             throw new \Exception("Key 'name' is required");
         }
 
-        if(count($this->getListRepository()->getListsByName($listData['name'])) > 0){
+        if(!is_null($this->getListRepository()->findOneByName($listData['name']))){
             throw new \Exception("List '{$listData['name']}' already exists.");
         }
 
@@ -117,9 +138,19 @@ class PhplistManager
         return $phplistList;
     }
 
-    protected function send($list, $subject, $content)
+    public function getOnePhplistListById($id)
     {
-        $filename = "/tmp/ideup_phplist_$list" . uniqid();
+        return $this->getListRepository()->findOneBy(array('id' => $id));
+    }
+
+    public function getOnePhplistListByName($name)
+    {
+        return $this->getListRepository()->findOneByName($name);
+    }
+
+    public function send(PhplistList $list, $subject, $content)
+    {
+        $filename = $this->getTmp() . "/ideup_phplist_{$list->getName()}" . uniqid();
 
         // Write message content into a file to associate with -psend command
         $handle = fopen($filename, "w+");
