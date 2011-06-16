@@ -2,97 +2,99 @@
 
 namespace Ideup\PhplistBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Ideup\PhplistBundle\Entity\PhplistList
  *
- * @orm:Table(name="phplist_list")
- * @orm:Entity(repositoryClass="Ideup\PhplistBundle\Entity\PhplistListRepository")
+ * @ORM\Table(name="phplist_list")
+ * @ORM\Entity(repositoryClass="Ideup\PhplistBundle\Entity\PhplistListRepository")
  */
 class PhplistList
 {
     /**
      * @var integer $id
      *
-     * @orm:Column(name="id", type="integer", nullable=false)
-     * @orm:Id
-     * @orm:GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var string $name
      *
-     * @orm:Column(name="name", type="string", length=255, nullable=false, unique=true)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false, unique=true)
      */
     private $name;
 
     /**
      * @var text $description
      *
-     * @orm:Column(name="description", type="text", nullable=true)
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
 
     /**
      * @var datetime $entered
      *
-     * @orm:Column(name="entered", type="datetime", nullable=true)
+     * @ORM\Column(name="entered", type="datetime", nullable=true)
      */
     private $entered;
 
     /**
      * @var integer $listorder
      *
-     * @orm:Column(name="listorder", type="integer", nullable=true)
+     * @ORM\Column(name="listorder", type="integer", nullable=true)
      */
     private $listorder;
 
     /**
      * @var string $prefix
      *
-     * @orm:Column(name="prefix", type="string", length=10, nullable=true)
+     * @ORM\Column(name="prefix", type="string", length=10, nullable=true)
      */
     private $prefix;
 
     /**
      * @var string $rssfeed
      *
-     * @orm:Column(name="rssfeed", type="string", length=255, nullable=true)
+     * @ORM\Column(name="rssfeed", type="string", length=255, nullable=true)
      */
     private $rssfeed;
 
     /**
      * @var datetime $modified
      *
-     * @orm:Column(name="modified", type="datetime", nullable=false)
+     * @ORM\Column(name="modified", type="datetime", nullable=false)
      */
     private $modified;
 
     /**
      * @var boolean $active
      *
-     * @orm:Column(name="active", type="boolean", nullable=true)
+     * @ORM\Column(name="active", type="boolean", nullable=true)
      */
     private $active;
 
     /**
      * @var integer $owner
      *
-     * @orm:Column(name="owner", type="integer", nullable=true)
+     * @ORM\Column(name="owner", type="integer", nullable=true)
      */
     private $owner;
 
     /**
-     * @orm:ManyToMany(targetEntity="PhplistUserUser", inversedBy="lists")
-     * @orm:JoinTable(name="phplist_listuser",
-     *      joinColumns={@orm:JoinColumn(name="listid", referencedColumnName="id")},
-     *      inverseJoinColumns={@orm:JoinColumn(name="userid", referencedColumnName="id")}
+     * @ORM\ManyToMany(targetEntity="PhplistUserUser", inversedBy="lists")
+     * @ORM\JoinTable(name="phplist_listuser",
+     *      joinColumns={@ORM\JoinColumn(name="listid", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="userid", referencedColumnName="id")}
      *      )
      */
     private $users;
 
     /**
-     * @orm:PrePersist
+     * @ORM\PrePersist
      */
     public function doPrePersist()
     {

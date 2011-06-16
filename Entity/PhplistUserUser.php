@@ -2,139 +2,141 @@
 
 namespace Ideup\PhplistBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Ideup\PhplistBundle\Entity\PhplistUserUser
  *
- * @orm:Table(name="phplist_user_user")
- * @orm:Entity(repositoryClass="Ideup\PhplistBundle\Entity\PhplistUserUserRepository")
+ * @ORM\Table(name="phplist_user_user")
+ * @ORM\Entity(repositoryClass="Ideup\PhplistBundle\Entity\PhplistUserUserRepository")
  */
 class PhplistUserUser
 {
     /**
      * @var integer $id
      *
-     * @orm:Column(name="id", type="integer", nullable=false)
-     * @orm:Id
-     * @orm:GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var string $email
      *
-     * @orm:Column(name="email", type="string", length=255, nullable=false)
+     * @ORM\Column(name="email", type="string", length=255, nullable=false)
      */
     private $email;
 
     /**
      * @var boolean $confirmed
      *
-     * @orm:Column(name="confirmed", type="boolean", nullable=true)
+     * @ORM\Column(name="confirmed", type="boolean", nullable=true)
      */
     private $confirmed;
 
     /**
      * @var boolean $blacklisted
      *
-     * @orm:Column(name="blacklisted", type="boolean", nullable=true)
+     * @ORM\Column(name="blacklisted", type="boolean", nullable=true)
      */
     private $blacklisted;
 
     /**
      * @var integer $bouncecount
      *
-     * @orm:Column(name="bouncecount", type="integer", nullable=true)
+     * @ORM\Column(name="bouncecount", type="integer", nullable=true)
      */
     private $bouncecount;
 
     /**
      * @var datetime $entered
      *
-     * @orm:Column(name="entered", type="datetime", nullable=true)
+     * @ORM\Column(name="entered", type="datetime", nullable=true)
      */
     private $entered;
 
     /**
      * @var datetime $modified
      *
-     * @orm:Column(name="modified", type="datetime", nullable=false)
+     * @ORM\Column(name="modified", type="datetime", nullable=false)
      */
     private $modified;
 
     /**
      * @var string $uniqid
      *
-     * @orm:Column(name="uniqid", type="string", length=255, nullable=true)
+     * @ORM\Column(name="uniqid", type="string", length=255, nullable=true)
      */
     private $uniqid;
 
     /**
      * @var boolean $htmlemail
      *
-     * @orm:Column(name="htmlemail", type="boolean", nullable=true)
+     * @ORM\Column(name="htmlemail", type="boolean", nullable=true)
      */
     private $htmlemail;
 
     /**
      * @var integer $subscribepage
      *
-     * @orm:Column(name="subscribepage", type="integer", nullable=true)
+     * @ORM\Column(name="subscribepage", type="integer", nullable=true)
      */
     private $subscribepage;
 
     /**
      * @var string $rssfrequency
      *
-     * @orm:Column(name="rssfrequency", type="string", length=100, nullable=true)
+     * @ORM\Column(name="rssfrequency", type="string", length=100, nullable=true)
      */
     private $rssfrequency;
 
     /**
      * @var string $password
      *
-     * @orm:Column(name="password", type="string", length=255, nullable=true)
+     * @ORM\Column(name="password", type="string", length=255, nullable=true)
      */
     private $password;
 
     /**
      * @var date $passwordchanged
      *
-     * @orm:Column(name="passwordchanged", type="date", nullable=true)
+     * @ORM\Column(name="passwordchanged", type="date", nullable=true)
      */
     private $passwordchanged;
 
     /**
      * @var boolean $disabled
      *
-     * @orm:Column(name="disabled", type="boolean", nullable=true)
+     * @ORM\Column(name="disabled", type="boolean", nullable=true)
      */
     private $disabled;
 
     /**
      * @var text $extradata
      *
-     * @orm:Column(name="extradata", type="text", nullable=true)
+     * @ORM\Column(name="extradata", type="text", nullable=true)
      */
     private $extradata;
 
     /**
      * @var string $foreignkey
      *
-     * @orm:Column(name="foreignkey", type="string", length=100, nullable=true)
+     * @ORM\Column(name="foreignkey", type="string", length=100, nullable=true)
      */
     private $foreignkey;
 
     /**
-     * @orm:ManyToMany(targetEntity="PhplistList", inversedBy="users")
-     * @orm:JoinTable(name="phplist_listuser",
-     *      joinColumns={@orm:JoinColumn(name="userid", referencedColumnName="id")},
-     *      inverseJoinColumns={@orm:JoinColumn(name="listid", referencedColumnName="id")}
+     * @ORM\ManyToMany(targetEntity="PhplistList", inversedBy="users")
+     * @ORM\JoinTable(name="phplist_listuser",
+     *      joinColumns={@ORM\JoinColumn(name="userid", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="listid", referencedColumnName="id")}
      *      )
      */
     private $lists;
 
     /**
-     * @orm:PrePersist
+     * @ORM\PrePersist
      */
     public function doPrePersist()
     {
