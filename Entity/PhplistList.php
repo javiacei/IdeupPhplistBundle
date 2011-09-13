@@ -1,4 +1,5 @@
 <?php
+/* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 namespace Ideup\PhplistBundle\Entity;
 
@@ -7,8 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Ideup\PhplistBundle\Entity\PhplistList
  *
+ * @ORM\Entity()
  * @ORM\Table(name="phplist_list")
- * @ORM\Entity(repositoryClass="Ideup\PhplistBundle\Entity\PhplistListRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class PhplistList
 {
@@ -61,7 +63,7 @@ class PhplistList
      *
      * @ORM\Column(name="rssfeed", type="string", length=255, nullable=true)
      */
-    private $rssfeed;
+    private $rssFeed;
 
     /**
      * @var datetime $modified
@@ -105,7 +107,7 @@ class PhplistList
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
@@ -217,23 +219,23 @@ class PhplistList
     }
 
     /**
-     * Set rssfeed
+     * Set rssFeed
      *
-     * @param string $rssfeed
+     * @param string $rssFeed
      */
-    public function setRssfeed($rssfeed)
+    public function setRssFeed($rssFeed)
     {
-        $this->rssfeed = $rssfeed;
+        $this->rssFeed = $rssFeed;
     }
 
     /**
-     * Get rssfeed
+     * Get rssFeed
      *
-     * @return string $rssfeed
+     * @return string $rssFeed
      */
-    public function getRssfeed()
+    public function getRssFeed()
     {
-        return $this->rssfeed;
+        return $this->rssFeed;
     }
 
     /**
