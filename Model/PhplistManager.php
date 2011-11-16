@@ -5,6 +5,8 @@ namespace Ideup\PhplistBundle\Model;
 
 use Ideup\PhplistBundle\Entity\PhplistList;
 use Ideup\PhplistBundle\Entity\PhplistUserUser;
+use Ideup\PhplistBundle\Entity\PhplistUserMessage;
+use Ideup\PhplistBundle\Entity\PhplistMessage;
 
 class PhplistManager
 {
@@ -12,11 +14,17 @@ class PhplistManager
 
     protected $serverFrom;
 
+    /**
+     * @var \Doctrine\ORM\EntityManager $em
+     */
     protected $em;
 
     protected $tmp;
 
-    public function  __construct(\Doctrine\ORM\EntityManager $em)
+    /**
+     * @param \Doctrine\ORM\EntityManager $em
+     */
+    public function __construct(\Doctrine\ORM\EntityManager $em)
     {
         $this->setEntityManager($em);
     }
@@ -74,11 +82,11 @@ class PhplistManager
     protected function getUserExtraData()
     {
         return array(
-            'confirmed'     => true,
-            'htmlemail'     => true,
-            'disabled'      => false,
-            'blacklisted'   => false,
-            'bouncecount'   => 0,
+            'confirmed'   => true,
+            'htmlemail'   => true,
+            'disabled'    => false,
+            'blacklisted' => false,
+            'bouncecount' => 0,
         );
     }
 
@@ -176,5 +184,18 @@ class PhplistManager
         $resultExec = exec("php {$this->getPhplistPath()} -pprocessqueue", $output);
 
         return $output;
+    }
+
+    /**
+     * Get some mailing metrics (views, bounced, etc.)
+     */
+    public function getMailingStatistics()
+    {
+        $query = $this->em->createQuery('SELECT m.id AS messageId, COUNT(u.viewed) AS views, COUNT(u.status) AS total,
+            m.subject, m.sent, m.bounceCount AS bounceCount, (COUNT(u.viewed) / COUNT(u.status) * 100) AS rate
+            FROM IdeupPhplistBundle:PhplistUserMessage u JOIN u.message m
+            GROUP BY m.id
+            ORDER BY m.entered');
+        return $query->getResult();
     }
 }
