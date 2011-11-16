@@ -1,9 +1,12 @@
 <?php
+/* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 namespace Ideup\PhplistBundle\Model;
 
-use Ideup\PhplistBundle\Entity\PhplistList as PhplistList;
-use Ideup\PhplistBundle\Entity\PhplistUserUser as PhplistUserUser;
+use Ideup\PhplistBundle\Entity\PhplistList;
+use Ideup\PhplistBundle\Entity\PhplistUserUser;
+use Ideup\PhplistBundle\Entity\PhplistUserMessage;
+use Ideup\PhplistBundle\Entity\PhplistMessage;
 
 class PhplistManager
 {
@@ -11,11 +14,17 @@ class PhplistManager
 
     protected $serverFrom;
 
+    /**
+     * @var \Doctrine\ORM\EntityManager $em
+     */
     protected $em;
 
     protected $tmp;
 
-    public function  __construct(\Doctrine\ORM\EntityManager $em)
+    /**
+     * @param \Doctrine\ORM\EntityManager $em
+     */
+    public function __construct(\Doctrine\ORM\EntityManager $em)
     {
         $this->setEntityManager($em);
     }
@@ -73,21 +82,21 @@ class PhplistManager
     protected function getUserExtraData()
     {
         return array(
-            'confirmed'     => true,
-            'htmlemail'     => true,
-            'disabled'      => false,
-            'blacklisted'   => false,
-            'bouncecount'   => 0,            
+            'confirmed'   => true,
+            'htmlemail'   => true,
+            'disabled'    => false,
+            'blacklisted' => false,
+            'bouncecount' => 0,
         );
     }
 
     public function createPhplistUser($userData, PhplistList $list)
     {
-        if (!is_array($userData)){
-            throw new \Exception("User data must be an array");
+        if (!is_array($userData)) {
+            throw new \Exception('User data must be an array');
         }
 
-        if(!array_key_exists('email', $userData) || is_null($userData['email'])){
+        if (!array_key_exists('email', $userData) || is_null($userData['email'])) {
             throw new \Exception("Key 'email' is required");
         }
 
@@ -96,13 +105,13 @@ class PhplistManager
         // Extra data.
         $extraData = $this->getUserExtraData();
         $intersects = array_intersect_key($userData, $extraData);
-        foreach ($intersects as $paramName => $paramValue){
+        foreach ($intersects as $paramName => $paramValue) {
             unset($extraData[$paramName]);
-        }                
+        }
         $userData = array_merge($userData, $extraData);
-        
+
         $phplistUser->fromArray($userData);
-        
+
         $phplistUser->addLists($list);
 
         $this->getEntityManager()->persist($phplistUser);
@@ -113,7 +122,7 @@ class PhplistManager
 
     public function getOnePhplistUserById($id)
     {
-        return $this->getUserRepository()->findOneBy(array('id' => $id));
+        return $this->getUserRepository()->findOneById($id);
     }
 
     public function getOnePhplistUserByEmail($email)
@@ -123,21 +132,21 @@ class PhplistManager
 
     public function createPhplistList($listData)
     {
-        if (!is_array($listData)){
-            throw new \Exception("List data must be an array");
+        if (!is_array($listData)) {
+            throw new \Exception('List data must be an array');
         }
 
-        if(!array_key_exists('name', $listData) || is_null($listData['name'])){
+        if (!array_key_exists('name', $listData) || is_null($listData['name'])) {
             throw new \Exception("Key 'name' is required");
         }
 
-        if(!is_null($this->getListRepository()->findOneByName($listData['name']))){
+        if (!is_null($this->getListRepository()->findOneByName($listData['name']))) {
             throw new \Exception("List '{$listData['name']}' already exists.");
         }
 
-        $phplistList = new PhplistList();        
+        $phplistList = new PhplistList();
         $phplistList->fromArray($listData);
-        
+
         $this->getEntityManager()->persist($phplistList);
         $this->getEntityManager()->flush();
 
@@ -146,7 +155,7 @@ class PhplistManager
 
     public function getOnePhplistListById($id)
     {
-        return $this->getListRepository()->findOneBy(array('id' => $id));
+        return $this->getListRepository()->findOneById($id);
     }
 
     public function getOnePhplistListByName($name)
@@ -159,21 +168,34 @@ class PhplistManager
         $filename = $this->getTmp() . "/ideup_phplist_{$list->getName()}" . uniqid();
 
         // Write message content into a file to associate with -psend command
-        $handle = fopen($filename, "w+");
+        $handle = fopen($filename, 'w+');
         fwrite($handle, $content);
         fclose($handle);
 
         $output = null;
         echo "php {$this->getPhplistPath()} -psend -s $subject -l {$list->getName()} -f {$this->getServerFrom()} < $filename" . "\n";
-        $resultExec = exec("php {$this->getPhplistPath()} -psend -s $subject -l {$list->getName()} -f {$this->getServerFrom()} < $filename", &$output);
+        $resultExec = exec("php {$this->getPhplistPath()} -psend -s $subject -l {$list->getName()} -f {$this->getServerFrom()} < $filename", $output);
         return $output;
     }
 
     public function processQueue()
     {
         $output = null;
-        $resultExec = exec("php {$this->getPhplistPath()} -pprocessqueue", &$output);
+        $resultExec = exec("php {$this->getPhplistPath()} -pprocessqueue", $output);
 
         return $output;
+    }
+
+    /**
+     * Get some mailing metrics (views, bounced, etc.)
+     */
+    public function getMailingStatistics()
+    {
+        $query = $this->em->createQuery('SELECT m.id AS messageId, COUNT(u.viewed) AS views, COUNT(u.status) AS total,
+            m.subject, m.sent, m.bounceCount AS bounceCount, (COUNT(u.viewed) / COUNT(u.status) * 100) AS rate
+            FROM IdeupPhplistBundle:PhplistUserMessage u JOIN u.message m
+            GROUP BY m.id
+            ORDER BY m.entered');
+        return $query->getResult();
     }
 }

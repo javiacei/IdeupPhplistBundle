@@ -1,4 +1,5 @@
 <?php
+/* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 namespace Ideup\PhplistBundle\Entity;
 
@@ -7,8 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Ideup\PhplistBundle\Entity\PhplistUserUser
  *
+ * @ORM\Entity()
  * @ORM\Table(name="phplist_user_user")
- * @ORM\Entity(repositoryClass="Ideup\PhplistBundle\Entity\PhplistUserUserRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class PhplistUserUser
 {
@@ -64,32 +66,32 @@ class PhplistUserUser
     private $modified;
 
     /**
-     * @var string $uniqid
+     * @var string $uniqId
      *
      * @ORM\Column(name="uniqid", type="string", length=255, nullable=true)
      */
-    private $uniqid;
+    private $uniqId;
 
     /**
-     * @var boolean $htmlemail
+     * @var boolean $htmlEmail
      *
      * @ORM\Column(name="htmlemail", type="boolean", nullable=true)
      */
-    private $htmlemail;
+    private $htmlEmail;
 
     /**
-     * @var integer $subscribepage
+     * @var integer $subscribePage
      *
      * @ORM\Column(name="subscribepage", type="integer", nullable=true)
      */
-    private $subscribepage;
+    private $subscribePage;
 
     /**
-     * @var string $rssfrequency
+     * @var string $rssFrequency
      *
      * @ORM\Column(name="rssfrequency", type="string", length=100, nullable=true)
      */
-    private $rssfrequency;
+    private $rssFrequency;
 
     /**
      * @var string $password
@@ -99,11 +101,11 @@ class PhplistUserUser
     private $password;
 
     /**
-     * @var date $passwordchanged
+     * @var date $passwordChanged
      *
      * @ORM\Column(name="passwordchanged", type="date", nullable=true)
      */
-    private $passwordchanged;
+    private $passwordChanged;
 
     /**
      * @var boolean $disabled
@@ -113,18 +115,18 @@ class PhplistUserUser
     private $disabled;
 
     /**
-     * @var text $extradata
+     * @var text $extraData
      *
      * @ORM\Column(name="extradata", type="text", nullable=true)
      */
-    private $extradata;
+    private $extraData;
 
     /**
-     * @var string $foreignkey
+     * @var string $foreignKey
      *
      * @ORM\Column(name="foreignkey", type="string", length=100, nullable=true)
      */
-    private $foreignkey;
+    private $foreignKey;
 
     /**
      * @ORM\ManyToMany(targetEntity="PhplistList", inversedBy="users")
@@ -142,16 +144,16 @@ class PhplistUserUser
     {
         $this->modified = new \DateTime();
         $this->entered = new \DateTime();
-        $this->uniqid = uniqid();
-        $this->passwordchanged = new \DateTime();
+        $this->uniqId = uniqId();
+        $this->passwordChanged = new \DateTime();
     }
 
 
     public function __construct()
     {
-        $this->lists = new \Doctrine\Common\Collections\ArrayCollection();        
+        $this->lists = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
@@ -283,83 +285,83 @@ class PhplistUserUser
     }
 
     /**
-     * Set uniqid
+     * Set uniqId
      *
      * @param string $uniqid
      */
-    public function setUniqid($uniqid)
+    public function setUniqId($uniqId)
     {
-        $this->uniqid = $uniqid;
+        $this->uniqId = $uniqId;
     }
 
     /**
-     * Get uniqid
+     * Get uniqId
      *
-     * @return string $uniqid
+     * @return string $uniqId
      */
-    public function getUniqid()
+    public function getUniqId()
     {
-        return $this->uniqid;
+        return $this->uniqId;
     }
 
     /**
-     * Set htmlemail
+     * Set htmlEmail
      *
-     * @param boolean $htmlemail
+     * @param boolean $htmlEmail
      */
-    public function setHtmlemail($htmlemail)
+    public function setHtmlEmail($htmlEmail)
     {
-        $this->htmlemail = $htmlemail;
+        $this->htmlEmail = $htmlEmail;
     }
 
     /**
-     * Get htmlemail
+     * Get htmlEmail
      *
-     * @return boolean $htmlemail
+     * @return boolean $htmlEmail
      */
-    public function getHtmlemail()
+    public function getHtmlEmail()
     {
-        return $this->htmlemail;
+        return $this->htmlEmail;
     }
 
     /**
-     * Set subscribepage
+     * Set subscribePage
      *
-     * @param integer $subscribepage
+     * @param integer $subscribePage
      */
-    public function setSubscribepage($subscribepage)
+    public function setSubscribePage($subscribePage)
     {
-        $this->subscribepage = $subscribepage;
+        $this->subscribePage = $subscribePage;
     }
 
     /**
-     * Get subscribepage
+     * Get subscribePage
      *
-     * @return integer $subscribepage
+     * @return integer $subscribePage
      */
-    public function getSubscribepage()
+    public function getSubscribePage()
     {
-        return $this->subscribepage;
+        return $this->subscribePage;
     }
 
     /**
-     * Set rssfrequency
+     * Set rssFrequency
      *
-     * @param string $rssfrequency
+     * @param string $rssFrequency
      */
-    public function setRssfrequency($rssfrequency)
+    public function setRssFrequency($rssFrequency)
     {
-        $this->rssfrequency = $rssfrequency;
+        $this->rssFrequency = $rssFrequency;
     }
 
     /**
-     * Get rssfrequency
+     * Get rssFrequency
      *
-     * @return string $rssfrequency
+     * @return string $rssFrequency
      */
-    public function getRssfrequency()
+    public function getRssFrequency()
     {
-        return $this->rssfrequency;
+        return $this->rssFrequency;
     }
 
     /**
@@ -383,23 +385,23 @@ class PhplistUserUser
     }
 
     /**
-     * Set passwordchanged
+     * Set passwordChanged
      *
-     * @param date $passwordchanged
+     * @param date $passwordChanged
      */
-    public function setPasswordchanged($passwordchanged)
+    public function setPasswordChanged($passwordChanged)
     {
-        $this->passwordchanged = $passwordchanged;
+        $this->passwordChanged = $passwordChanged;
     }
 
     /**
-     * Get passwordchanged
+     * Get passwordChanged
      *
-     * @return date $passwordchanged
+     * @return date $passwordChanged
      */
-    public function getPasswordchanged()
+    public function getPasswordChanged()
     {
-        return $this->passwordchanged;
+        return $this->passwordChanged;
     }
 
     /**
@@ -423,43 +425,43 @@ class PhplistUserUser
     }
 
     /**
-     * Set extradata
+     * Set extraData
      *
-     * @param text $extradata
+     * @param text $extraData
      */
-    public function setExtradata($extradata)
+    public function setExtraData($extraData)
     {
-        $this->extradata = $extradata;
+        $this->extraData = $extraData;
     }
 
     /**
-     * Get extradata
+     * Get extraData
      *
-     * @return text $extradata
+     * @return text $extraData
      */
-    public function getExtradata()
+    public function getExtraData()
     {
-        return $this->extradata;
+        return $this->extraData;
     }
 
     /**
-     * Set foreignkey
+     * Set foreignKey
      *
-     * @param string $foreignkey
+     * @param string $foreignKey
      */
-    public function setForeignkey($foreignkey)
+    public function setForeignKey($foreignKey)
     {
-        $this->foreignkey = $foreignkey;
+        $this->foreignKey = $foreignKey;
     }
 
     /**
-     * Get foreignkey
+     * Get foreignKey
      *
-     * @return string $foreignkey
+     * @return string $foreignKey
      */
-    public function getForeignkey()
+    public function getForeignKey()
     {
-        return $this->foreignkey;
+        return $this->foreignKey;
     }
 
     /**
